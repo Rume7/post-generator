@@ -46,3 +46,13 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+resilience4j:
+  ratelimiter:
+    instances:
+      essay-generation:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1m
+        timeoutDuration: 5s
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 100
