@@ -30,7 +30,7 @@ jobs:
     - name: Run OWASP Dependency Check
       run: |
         mvn org.owasp:dependency-check-maven:check \
-          -Dformat=HTML \
+          -Dformat=XML \
           -DfailBuildOnCVSS=7 \
           -DsuppressionFiles=.github/dependency-check-suppressions.xml \
           -DretireJsAnalyzerEnabled=true \
@@ -42,5 +42,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: security-report
-        path: target/dependency-check-report.html
+        path: |
+          target/dependency-check-report.xml
+          target/dependency-check-report.html
         retention-days: 30 
