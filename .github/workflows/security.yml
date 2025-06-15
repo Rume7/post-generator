@@ -22,13 +22,20 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    - name: Clean OWASP data directory
+      run: |
+        rm -rf ~/.dependency-check
+        mkdir -p ~/.dependency-check/data
+    
     - name: Run OWASP Dependency Check
       run: |
         mvn org.owasp:dependency-check-maven:check \
           -Dformat=HTML \
           -DfailBuildOnCVSS=7 \
           -DsuppressionFiles=.github/dependency-check-suppressions.xml \
-          -DretireJsAnalyzerEnabled=true
+          -DretireJsAnalyzerEnabled=true \
+          -DdataDirectory=~/.dependency-check/data \
+          -DcveValidForHours=24
     
     - name: Upload security report
       if: always()

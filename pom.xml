@@ -143,6 +143,9 @@
 					<suppressionFiles>
 						<suppressionFile>.github/dependency-check-suppressions.xml</suppressionFile>
 					</suppressionFiles>
+					<dataDirectory>${user.home}/.dependency-check/data</dataDirectory>
+					<cveValidForHours>24</cveValidForHours>
+					<retireJsAnalyzerEnabled>true</retireJsAnalyzerEnabled>
 				</configuration>
 			</plugin>
 		</plugins>
