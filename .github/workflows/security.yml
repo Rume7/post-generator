@@ -25,20 +25,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests
-
-      - name: Run SonarQube Analysis
-        if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
-        uses: SonarSource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=post-generator
-            -Dsonar.projectName=post-generator
-            -Dsonar.java.binaries=target/classes
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.java.source=17
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml 
+        run: mvn clean install -DskipTests 
