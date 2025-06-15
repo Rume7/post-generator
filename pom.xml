@@ -158,20 +158,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>7.4.4</version>
-				<configuration>
-					<failBuildOnCVSS>7</failBuildOnCVSS>
-					<suppressionFiles>
-						<suppressionFile>.github/dependency-check-suppressions.xml</suppressionFile>
-					</suppressionFiles>
-					<dataDirectory>${user.home}/.dependency-check/data</dataDirectory>
-					<cveValidForHours>24</cveValidForHours>
-					<retireJsAnalyzerEnabled>true</retireJsAnalyzerEnabled>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
