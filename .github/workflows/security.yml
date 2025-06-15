@@ -28,6 +28,7 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube Analysis
+        if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_HOST_URL != '' }}
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
