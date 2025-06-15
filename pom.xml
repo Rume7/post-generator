@@ -16,6 +16,10 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<springdoc.version>2.3.0</springdoc.version>
+		<langchain4j.version>0.27.1</langchain4j.version>
+		<resilience4j.version>2.1.0</resilience4j.version>
+		<jackson.version>2.16.1</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -59,17 +63,17 @@
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j</artifactId>
-			<version>0.27.1</version>
+			<version>${langchain4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j-open-ai</artifactId>
-			<version>0.27.1</version>
+			<version>${langchain4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j-anthropic</artifactId>
-			<version>0.33.0</version>
+			<version>${langchain4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,12 +82,12 @@
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-ratelimiter</artifactId>
-			<version>2.1.0</version>
+			<version>${resilience4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-spring-boot3</artifactId>
-			<version>2.1.0</version>
+			<version>${resilience4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -98,12 +102,27 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.5.0</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>me.paulschwarz</groupId>
 			<artifactId>spring-dotenv</artifactId>
 			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
