@@ -11,8 +11,6 @@ on:
 jobs:
   security:
     runs-on: ubuntu-latest
-    env:
-      JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.15-6/x64
     
     steps:
     - uses: actions/checkout@v4
@@ -24,27 +22,18 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
-    - name: Verify Java installation
-      run: |
-        java -version
-        echo "JAVA_HOME: $JAVA_HOME"
-    
     - name: Run OWASP Dependency Check
-      uses: dependency-check/Dependency-Check_Action@main
-      with:
-        project: 'Post Generator'
-        path: '.'
-        format: 'HTML'
-        out: 'reports'
-        args: >
-          --suppression ./.github/dependency-check-suppressions.xml
-          --failOnCVSS 7
-          --enableRetired
+      run: |
+        mvn org.owasp:dependency-check-maven:check \
+          -Dformat=HTML \
+          -DfailBuildOnCVSS=7 \
+          -DsuppressionFiles=.github/dependency-check-suppressions.xml \
+          -DretireJsAnalyzerEnabled=true
     
     - name: Upload security report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: security-report
-        path: reports/
+        path: target/dependency-check-report.html
         retention-days: 30 
