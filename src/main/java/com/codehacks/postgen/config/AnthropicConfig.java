@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 public class AnthropicConfig {
 
     @Bean
-    public AnthropicChatModel anthropicChatModel(AppConfig appConfig) {
+    public AnthropicChatModel anthropicChatModel() {
         return AnthropicChatModel.builder()
-                .apiKey(appConfig.getAnthropicApiKey())
-                .modelName(appConfig.getAnthropicModel())
+                .apiKey("")
+                .modelName("")
                 .build();
     }
 } 

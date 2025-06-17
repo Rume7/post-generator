@@ -13,4 +13,5 @@ public class EssayRequest {
     
     @Size(max = 1000, message = "Additional context must not exceed 1000 characters")
     private String additionalContext;
+
 } 

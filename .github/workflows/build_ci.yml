@@ -2,11 +2,11 @@ name: CI and Security
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, 'feature/**', 'bugfix/**' ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, 'feature/**', 'bugfix/**' ]
   schedule:
-    - cron: '0 0 * * 0'  # Run weekly on Sunday at midnight
+    - cron: '0 0 * * 0' # Run weekly on Sunday at midnight
 
 jobs:
   build-and-security:
