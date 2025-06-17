@@ -1,19 +1,9 @@
-ARG VERSION=0.0.1-SNAPSHOT
-FROM eclipse-temurin:17-jdk-alpine as build
-WORKDIR /workspace/app
+FROM openjdk:17-jdk
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+WORKDIR /app
 
-RUN ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+COPY target/post-generator-1.0.0.jar /app/post-gen.jar
 
-FROM eclipse-temurin:17-jre-alpine
-VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.codehacks.postgen.PostGeneratorApplication"]
+EXPOSE 8080
+
+CMD ["java", "-jar", "post-gen.jar"]
