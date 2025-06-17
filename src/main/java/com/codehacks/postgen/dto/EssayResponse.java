@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EssayResponse {
+
     private String topic;
     private String content;
     private LocalDateTime generatedAt;
     private String modelUsed;
+
 } 
