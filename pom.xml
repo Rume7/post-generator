@@ -23,13 +23,6 @@
 		<jackson.version>2.16.2</jackson.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- Spring Boot Starters -->
 		<dependency>
@@ -83,13 +76,15 @@
 		</dependency>
 
 		<!-- Anthropic Claude -->
-<!--		<dependency>-->
-<!--			<groupId>com.anthropic</groupId>-->
-<!--			<artifactId>anthropic-java</artifactId>-->
-<!--			<version>0.4.0</version>-->
-<!--			<scope>system</scope>-->
-<!--			<systemPath>${project.basedir}/libs/anthropic-java-0.4.0.jar</systemPath>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.anthropic</groupId>
+			<artifactId>anthropic-java-core</artifactId>
+			<version>0.7.0</version> </dependency>
+		<dependency>
+			<groupId>com.anthropic</groupId>
+			<artifactId>anthropic-java</artifactId>
+			<version>0.7.0</version>
+		</dependency>
 
 		<!-- Resilience4j -->
 		<dependency>
