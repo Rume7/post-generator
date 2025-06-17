@@ -34,7 +34,7 @@ public class EssayController {
                     .topic(request.getTopic())
                     .content(essay)
                     .generatedAt(LocalDateTime.now())
-                    .modelUsed("gpt-4") // This should come from the service
+                    .modelUsed("")
                     .build();
 
             return ResponseEntity.ok(response);

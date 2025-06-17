@@ -2,7 +2,6 @@ package com.codehacks.postgen.service.impl;
 
 import com.codehacks.postgen.service.EssayGenerationService;
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EssayGenerationServiceImpl implements EssayGenerationService {
 
-    private final OpenAiChatModel openAiModel;
     private final AnthropicChatModel anthropicModel;
 
     @Override
@@ -19,8 +17,9 @@ public class EssayGenerationServiceImpl implements EssayGenerationService {
         if (additionalContext != null && !additionalContext.trim().isEmpty()) {
             prompt += "\nAdditional context: " + additionalContext;
         }
-        
+
+        return null;
         // For now, we'll use OpenAI. In the future, we can add logic to choose between models
-        return openAiModel.generate(prompt);
+        // return openAiModel.generate(prompt);
     }
 } 
