@@ -37,7 +37,7 @@ jobs:
 
       - name: Set Docker Image Tag
         id: set_tag # Give this step an ID so we can reference its outputs
-        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
 
       - name: Build Docker Image
         uses: docker/build-push-action@v2
@@ -45,7 +45,7 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:${{ env.IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/postgen:${{ env.IMAGE_TAG }}
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/main'
@@ -61,4 +61,4 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:${{ env.IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/postgen:${{ env.IMAGE_TAG }}
