@@ -1,9 +1,20 @@
-name: Version Bump on Main Merge
+name: Version Bump
 
 on:
   push:
     branches:
-      - main # Only run when code is pushed directly or merged into 'main'
+      - main # Still run on merge to main (e.g., for default patch bump or if you remove workflow_dispatch)
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
+    inputs:
+      increment_type:
+        description: 'Type of version increment (patch, minor, major)'
+        required: true
+        default: 'patch' # Default to patch increment if run manually without specifying
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
   version-bump:
@@ -16,8 +27,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Important: Fetch all history for git tags and proper versioning
-          fetch-depth: 0
+          fetch-depth: 0 # Important: Fetch all history for git tags and proper versioning
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -34,18 +44,42 @@ jobs:
         id: get_current_version
         run: echo "CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-      - name: Determine New Version (Patch Increment)
+      - name: Determine New Version
         id: determine_new_version
         run: |
           current_version="${{ env.CURRENT_VERSION }}"
+          increment_type="${{ github.event.inputs.increment_type || 'patch' }}" # Use input, default to 'patch' if not provided (e.g., on push trigger)
+
           # Split major, minor, patch
           IFS='.' read -r major minor patch <<< "$current_version"
-          # Increment patch
-          new_patch=$((patch + 1))
-          # Construct new version
-          new_version="${major}.${minor}.${new_patch}"
+
+          new_major="$major"
+          new_minor="$minor"
+          new_patch="$patch"
+
+          case "$increment_type" in
+            "major")
+              new_major=$((major + 1))
+              new_minor=0
+              new_patch=0
+              ;;
+            "minor")
+              new_minor=$((minor + 1))
+              new_patch=0
+              ;;
+            "patch")
+              new_patch=$((patch + 1))
+              ;;
+            *)
+              echo "Invalid increment_type: $increment_type. Defaulting to patch."
+              new_patch=$((patch + 1))
+              ;;
+          esac
+
+          new_version="${new_major}.${new_minor}.${new_patch}"
           echo "NEW_VERSION=${new_version}" >> $GITHUB_ENV
           echo "new_version=$new_version" >> "$GITHUB_OUTPUT" # For direct reference in later steps if needed
+          echo "Incrementing from $current_version to $new_version using $increment_type increment."
 
       - name: Update pom.xml with new version
         run: mvn versions:set -DnewVersion=${{ env.NEW_VERSION }} -DgenerateBackupPoms=false
@@ -58,10 +92,6 @@ jobs:
 
       - name: Create Git Tag
         run: git tag v${{ env.NEW_VERSION }}
-        # Note: Pushing the tag will trigger the push event again,
-        # but since this workflow only runs on 'main' branch pushes,
-        # and this specific push is just a tag, it won't re-trigger
-        # the version bump job unless a direct commit to main also happened.
 
       - name: Push Git Tag
         run: git push origin v${{ env.NEW_VERSION }}
