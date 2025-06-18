@@ -45,7 +45,7 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKER_USERNAME }}/postgen:${{ env.IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/postgen:latest
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/main'
