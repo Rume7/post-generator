@@ -61,4 +61,4 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/postgen:${{ env.IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/postgen:${{ env.IMAGE_TAG }}
