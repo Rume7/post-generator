@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/essay")
+@RequestMapping("/api/v1/generate")
 @RequiredArgsConstructor
 public class EssayController {
 
