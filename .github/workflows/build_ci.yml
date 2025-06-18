@@ -9,8 +9,8 @@ on:
     - cron: '0 0 * * 0' # Run weekly on Sunday at midnight
 
 jobs:
-  build-and-security:
-    name: Build and Security
+  build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
+
+      - name: Run Checkstyle (Linting)
+        run: mvn checkstyle:check --file pom.xml
 
       - name: Unit Tests
         run: mvn -B test --file pom.xml
@@ -31,24 +35,30 @@ jobs:
           mvn clean
           mvn -B package --file pom.xml
 
+      - name: Set Docker Image Tag
+        id: set_tag # Give this step an ID so we can reference its outputs
+        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
       - name: Build Docker Image
         uses: docker/build-push-action@v2
         with:
           context: .
           dockerfile: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:$(date + %Y%m%d%H%M%S)
+          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:${{ env.IMAGE_TAG }}
 
       - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Push to Docker Hub
+        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v2
         with:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:$(date + %Y%m%d%H%M%S)
+          tags: ${{ secrets.DOCKER_USERNAME }}/post-gen:${{ env.IMAGE_TAG }}
