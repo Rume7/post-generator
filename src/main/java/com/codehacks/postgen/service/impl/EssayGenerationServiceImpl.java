@@ -19,7 +19,6 @@ public class EssayGenerationServiceImpl implements EssayGenerationService {
         }
 
         return null;
-        // For now, we'll use OpenAI. In the future, we can add logic to choose between models
         // return openAiModel.generate(prompt);
     }
 } 
