@@ -1,23 +1,28 @@
 package com.codehacks.postgen.config;
 
+import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
-import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.time.Duration;
 
+/**
+ * Configuration for rate limiting.
+ */
 @Configuration
 public class RateLimitConfig {
 
+    /**
+     * Bean for essay generation rate limiter.
+     * @return the RateLimiter
+     */
     @Bean
-    public RateLimiterRegistry rateLimiterRegistry() {
+    public RateLimiter essayGenerationRateLimiter() {
         RateLimiterConfig config = RateLimiterConfig.custom()
-                .limitForPeriod(10)
-                .limitRefreshPeriod(Duration.ofMinutes(1))
-                .timeoutDuration(Duration.ofSeconds(5))
+                .limitForPeriod(3) // 3 requests
+                .limitRefreshPeriod(Duration.ofSeconds(5)) // every 5 seconds
+                .timeoutDuration(Duration.ofSeconds(1)) // wait up to 1 second
                 .build();
-
-        return RateLimiterRegistry.of(config);
+        return RateLimiter.of("customEssayRateLimiter", config);
     }
-} 
+}

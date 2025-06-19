@@ -1,10 +1,12 @@
 spring:
   application:
-    name: EssayGenerationService
+    name: post-generator
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: ${app.db.url}
-    username: ${app.db.username}
-    password: ${app.db.password}
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTT_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,46 +15,76 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  sql:
-    init:
-      mode: always
 
+  ai:
+    vertexai:
+      gemini:
+        project-id: your-google-cloud-project-id
+        location: us-central1
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-pro
+
+# Server port, etc.
 server:
   port: 8080
 
-logging:
-  level:
-    root: INFO
-    org.springframework: INFO
-    org.hibernate: INFO
-
-# Application configuration
-app:
-  db:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  openai:
-    api-key: ${OPENAI_API_KEY}
-    model: ${OPENAI_MODEL:-gpt-4}
-  anthropic:
-    api-key: ${ANTHROPIC_API_KEY}
-    model: ${ANTHROPIC_MODEL:-claude-3}
-
-# Swagger configuration
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-
+# --- Rate Limiting Configuration (Resilience4j) ---
+# This configures a RateLimiter instance named 'essayRateLimiter'
 resilience4j:
   ratelimiter:
     instances:
-      essay-generation:
-        limitForPeriod: 10
-        limitRefreshPeriod: 1m
-        timeoutDuration: 5s
-        registerHealthIndicator: true
-        eventConsumerBufferSize: 100
+      essayRateLimiter:
+        limitForPeriod: 5      # Maximum number of permits (requests) allowed in the refresh period
+        limitRefreshPeriod: 1s # Time period in which the limitForPeriod applies (e.g., 5 requests per 1 second)
+        timeoutDuration: 0s    # How long to wait for a permit if the limit is exceeded (0s means fail fast)
+        eventConsumerBufferSize: 100 # Size of the event buffer for metrics/monitoring
+
+# You can define multiple rate limiters for different endpoints/services:
+#      anotherApiRateLimiter:
+#        limitForPeriod: 20
+#        limitRefreshPeriod: 1m
+#        timeoutDuration: 500ms
+
+# --- Swagger/OpenAPI Configuration (Springdoc-openapi) ---
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html # Customize the Swagger UI path (default is /swagger-ui/index.html)
+    disable-swagger-default-url: true # Prevent loading the default Swagger Petstore URL
+    # url: /v3/api-docs # Not needed if you use default /v3/api-docs
+
+  api-docs:
+    path: /v3/api-docs # Customize the OpenAPI JSON documentation path (default is /v3/api-docs)
+
+  # General OpenAPI information
+  info:
+    title: Essay Generation API
+    description: API for generating blog essays using Google Gemini and managing them.
+    version: v1.0.2
+    terms-of-service: https://www.codehacks.com/terms # Replace with your terms
+    contact:
+      name: Rhumy
+      url: https://www.codehacks.com
+      email: contact@codehacks.com
+    license:
+      name: Apache 2.0
+      url: https://www.apache.org/licenses/LICENSE-2.0.html
+  # Set specific servers (useful if deployed behind a proxy/load balancer)
+  servers:
+    - url: http://localhost:8080 # Your local application URL
+      description: Local Development Server
+    # - url: https://api.yourdomain.com
+    #   description: Production Server
+
+# Actuator (optional, but good for monitoring Resilience4j metrics)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,ratelimiters # Expose these endpoints
+  endpoint:
+    health:
+      show-details: always
+    ratelimiters:
+      enabled: true # Enable Resilience4j RateLimiter health indicator
