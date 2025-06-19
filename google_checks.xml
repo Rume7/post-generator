@@ -122,16 +122,11 @@
             <property name="arrayInitIndent" value="2"/>
         </module>
 
-        <!-- Checks for line wrapping -->
-        <module name="LineLength">
-            <property name="max" value="120"/>
-        </module>
+    </module>
 
-        <!-- Checks for line separators -->
-        <module name="LineSeparator">
-            <property name="fileExtensions" value="java"/>
-        </module>
-
+    <!-- Checks for line wrapping -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
     </module>
 
 </module> 
