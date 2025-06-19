@@ -1,9 +1,52 @@
+version: '3.8' # Specify the Docker Compose file format version
+
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+  # Service for your Spring Boot application
+  app:
+    build: . # Build the image from the Dockerfile in the current directory
+    container_name: post-generator-app # Assign a custom container name
     ports:
-      - '5432'
+      - "8080:8080" # Map host port 8080 to container port 8080
+    environment:
+      # Environment variables for the Spring Boot application
+      # Docker Compose will read these from the .env file in the same directory
+      # Spring Boot automatically converts these to properties (e.g., SPRING_AI_GEMINI_API_KEY -> spring.ai.gemini.api-key)
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      SPRING_AI_VERTEXAI_GEMINI_PROJECT_ID: ${SPRING_AI_VERTEXAI_GEMINI_PROJECT_ID}
+      # Database connection details for the Spring Boot app
+      # 'db' refers to the name of the PostgreSQL service defined below
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      # If you need to set the JPA DDL-auto property for development:
+      # SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db # Ensure the 'db' service starts before 'app'
+    networks:
+      - app-network # Connect to the custom network
+
+  # Service for your PostgreSQL database
+  db:
+    image: postgres:16.8-alpine # Use the official PostgreSQL 16 image (alpine variant is lightweight)
+    container_name: post-generator-db # Assign a custom container name
+    ports:
+      - "5432:5432" # Expose PostgreSQL port (useful for connecting with external tools like DBeaver)
+    environment:
+      # Environment variables specific to the PostgreSQL container
+      # These are picked up by the postgres image to initialize the database
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data # Mount a named volume for persistent data
+    networks:
+      - app-network # Connect to the custom network
+
+# Define named volumes for persistent data
+volumes:
+  pg_data:
+
+# Define a custom bridge network for services to communicate securely
+networks:
+  app-network:
+    driver: bridge

@@ -1,17 +1,13 @@
 app:
-  db-url: jdbc:postgresql://localhost:5432/postgen_test
+  db-url: jdbc:postgresql://localhost:5432/postgen_db_test
   db-username: postgres
   db-password: postgres
-  openai-api-key: test-openai-key
-  openai-model: gpt-3.5-turbo
-  anthropic-api-key: test-anthropic-key
-  anthropic-model: claude-3-sonnet-20240229
 
 spring:
   datasource:
-    url: ${app.db-url}
-    username: ${app.db-username}
-    password: ${app.db-password}
+    url: ${db-url}
+    username: ${db-username}
+    password: ${db-password}
   jpa:
     hibernate:
       ddl-auto: create-drop
