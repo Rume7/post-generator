@@ -1,5 +1,8 @@
 package com.codehacks.postgen.service;
 
+import com.codehacks.postgen.exception.DuplicateEssayTopicException;
+import com.codehacks.postgen.exception.EssayGenerationException;
+import com.codehacks.postgen.exception.EssayServiceException;
 import com.codehacks.postgen.model.Essay;
 import com.codehacks.postgen.model.EssayStatus;
 import com.codehacks.postgen.repository.EssayRepository;
@@ -8,14 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-import com.codehacks.postgen.exception.EssayGenerationException;
-import com.codehacks.postgen.exception.EssayServiceException;
-import com.codehacks.postgen.exception.DuplicateEssayTopicException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of EssayService.
+ */
 @Service
 @Transactional
 public class EssayServiceImpl implements EssayService {

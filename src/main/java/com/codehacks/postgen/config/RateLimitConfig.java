@@ -4,14 +4,18 @@ import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.time.Duration;
 
+/**
+ * Configuration for rate limiting.
+ */
 @Configuration
 public class RateLimitConfig {
 
-    // This bean can be used for custom rate limiting scenarios not covered by application.yml
-    // Or to define a default RateLimiterConfig
+    /**
+     * Bean for essay generation rate limiter.
+     * @return the RateLimiter
+     */
     @Bean
     public RateLimiter essayGenerationRateLimiter() {
         RateLimiterConfig config = RateLimiterConfig.custom()

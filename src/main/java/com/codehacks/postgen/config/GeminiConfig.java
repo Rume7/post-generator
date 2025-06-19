@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// If you're using the free Google AI Studio API (OpenAI compatible endpoint),
-// you might not need this @Configuration class if Spring AI's autoconfiguration
-// is sufficient with properties. However, for more control, it's good practice.
-
+/**
+ * Configuration for Google Gemini (Vertex AI) ChatClient.
+ */
 @Configuration
 public class GeminiConfig {
 

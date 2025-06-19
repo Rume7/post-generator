@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing an essay.
+ */
 @Entity
 @Table(name = "essays")
 @Data
