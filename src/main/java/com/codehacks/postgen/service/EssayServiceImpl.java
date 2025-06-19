@@ -28,6 +28,8 @@ public class EssayServiceImpl implements EssayService {
     private static final int MIN_TOPIC_LENGTH = 3;
     private static final int MAX_TOPIC_LENGTH = 500;
     private static final int MAX_CONTENT_LENGTH = 10000;
+    private static final int MIN_WORD_COUNT = 50;
+    private static final int MIN_VALID_ID = 1;
     private static final String INVALID_TOPIC_CHARS_REGEX = "[<>\"'&]"; // Basic XSS prevention
     
     private final EssayRepository essayRepository;
@@ -80,7 +82,7 @@ public class EssayServiceImpl implements EssayService {
 
     @Override
     public Optional<Essay> getEssayById(Long id) {
-        if (id == null || id <= 0) {
+        if (id == null || id < MIN_VALID_ID) {
             logger.warn("Invalid essay ID provided: {}", id);
             return Optional.empty();
         }
@@ -105,7 +107,7 @@ public class EssayServiceImpl implements EssayService {
 
     @Override
     public Optional<Essay> updateEssay(Long id, Essay updatedEssay) {
-        if (id == null || id <= 0) {
+        if (id == null || id < MIN_VALID_ID) {
             logger.warn("Invalid essay ID provided for update: {}", id);
             return Optional.empty();
         }
@@ -146,7 +148,7 @@ public class EssayServiceImpl implements EssayService {
 
     @Override
     public Optional<Essay> updateEssayStatus(Long id, EssayStatus newStatus) {
-        if (id == null || id <= 0) {
+        if (id == null || id < MIN_VALID_ID) {
             logger.warn("Invalid essay ID provided for status update: {}", id);
             return Optional.empty();
         }
@@ -172,7 +174,7 @@ public class EssayServiceImpl implements EssayService {
 
     @Override
     public void deleteEssay(Long id) {
-        if (id == null || id <= 0) {
+        if (id == null || id < MIN_VALID_ID) {
             logger.warn("Invalid essay ID provided for deletion: {}", id);
             return;
         }
@@ -244,8 +246,8 @@ public class EssayServiceImpl implements EssayService {
         
         // Check for minimum word count
         int wordCount = calculateWordCount(content);
-        if (wordCount < 50) {
-            throw new EssayGenerationException("Generated content is too short (minimum 50 words required)");
+        if (wordCount < MIN_WORD_COUNT) {
+            throw new EssayGenerationException("Generated content is too short (minimum " + MIN_WORD_COUNT + " words required)");
         }
     }
 
