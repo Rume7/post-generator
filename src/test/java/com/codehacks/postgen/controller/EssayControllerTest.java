@@ -2,7 +2,6 @@ package com.codehacks.postgen.controller;
 
 import com.codehacks.postgen.dto.EssayRequest;
 import com.codehacks.postgen.dto.EssayFullUpdateRequest;
-import com.codehacks.postgen.dto.EssayResponse;
 import com.codehacks.postgen.dto.EssayUpdateStatusRequest;
 import com.codehacks.postgen.exception.DuplicateEssayTopicException;
 import com.codehacks.postgen.exception.EssayServiceException;

@@ -626,7 +626,6 @@ class EssayServiceTest {
 
         when(requestSpec.call()).thenReturn(callResponseSpec);
 
-        // Simulate short AI response (less than 50 words)
         when(callResponseSpec.content()).thenReturn("This is a short response with only ten words.");
 
         EssayServiceImpl testEssayService = new EssayServiceImpl(essayRepository, chatClientBuilder);
@@ -865,7 +864,6 @@ class EssayServiceTest {
                 .status(EssayStatus.DRAFT)
                 .build();
 
-        // Mock repository to return a list containing another essay with the same topic
         when(essayRepository.findAll()).thenReturn(List.of(existingEssay));
 
         DuplicateEssayTopicException exception = assertThrows(
