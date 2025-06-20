@@ -11,7 +11,7 @@
 
     <groupId>com.codehacks</groupId>
     <artifactId>postgen</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <name>post-generator</name>
     <description>Essay Generation Application</description>
 
