@@ -4,6 +4,8 @@ app:
   db-password: postgres
 
 spring:
+  profiles:
+    active: test
   datasource:
     url: ${db-url}
     username: ${db-username}
