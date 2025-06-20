@@ -1,5 +1,6 @@
 package com.codehacks.postgen.dto;
 
+import com.codehacks.postgen.model.EssayStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,9 +16,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EssayResponse {
 
+    private Long id;
     private String topic;
     private String content;
-    private LocalDateTime generatedAt;
-    private String modelUsed;
+    private Integer lengthWords;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private EssayStatus status;
 
 } 
