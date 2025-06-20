@@ -9,11 +9,13 @@ import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Configuration for Google Gemini (Vertex AI) ChatClient.
  */
 @Configuration
+@Profile("!test")
 public class GeminiConfig {
 
     /**
