@@ -2,12 +2,18 @@ package com.codehacks.postgen.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for essay request.
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class EssayRequest {
     
     @NotBlank(message = "Topic is required")
